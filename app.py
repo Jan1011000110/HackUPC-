@@ -134,54 +134,30 @@ def get_matrix(url):
     x = np.array(get_image(url).resize((128, 128)))
     return x
 
+# Get the urls of all images
 urls = pd.read_csv("data/raw_data.csv")
+
+# List where we store the info of every pixel of the images
 data = []
-def take_batch3(start, end):
+
+# \pre end <= number of the last image
+# \post The data is stored in data
+def get_batch(start, end):
     for i in range(start, min(end, urls.shape[0])):
         for j in range(urls.iloc[i].shape[0]):
             try:
                 #array_data = np.load(f'data/proc_data/{i//100}/{i}_{j}.npy')
-                array_data = np.load(f'data/archivos/{i//100}/{i}_{j}.npy')
+                array_data = np.load(f'data/archivos/{i // 100}/{i}_{j}.npy')
                 
-                data.append([array_data,i,j])
+                data.append([array_data, i, j])
 
             except:
                 continue
-take_batch3(1,1000)
+        
+get_batch(0,1000)
 
-# def solve(url):
-#     # Get matrix from the image we want
-#     x = get_matrix(url)
-                
-#     candidates = []
-
-#     # Get K candidates 
-#     for _ in range(NUMBER_SUBSET):
-#         # Get random indexes and the url in that position
-#         r = random.randint(0, ROWS - 1)
-#         c = random.randint(0, COLS - 1)
-
-#         new_url =  df.iloc[r, c]
-#         while not isinstance(new_url, str):
-#             r = random.randint(0, ROWS - 1)
-#             c = random.randint(0, COLS - 1)
-#             new_url = df.iloc[r, c]
-
-#         # Get matrix from the candidate
-#         y = get_matrix(new_url)
-
-#         # Add the difference between the histograms
-#         candidates.append([dist2(compute_histogram(x), compute_histogram(y)), new_url])
-    
-#     # Sort the array
-#     candidates.sort()
-
-#     # Get the best candidates 
-#     ans = []
-#     for i in range(NUMBER_CANDIDATES):
-#         ans.append(candidates[i][1])
-#     return ans
-
+# \pre The url is valid
+# \post A list with the top NUMBER_CANDIDATE image's that are most similar with the image specified in url
 def solve(url):
     # Get matrix from the image we want
     x = get_matrix(url)
@@ -191,10 +167,10 @@ def solve(url):
     # Get K candidates 
     for _ in range(NUMBER_SUBSET):
         # Get random indexes and the url in that position
-        rand = random.randint(0, len(data)-1)
+        rand = random.randint(0, len(data) - 1)
         newhist =  compute_histogram(data[rand][0])
         # Add the difference between the histograms
-        candidates.append([dist2(x_hist, newhist), df.iloc[data[rand][1],data[rand][2]]])
+        candidates.append([dist2(x_hist, newhist), df.iloc[data[rand][1], data[rand][2]]])
     
     # Sort the array
     candidates.sort()
