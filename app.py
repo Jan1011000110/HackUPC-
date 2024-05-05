@@ -125,8 +125,8 @@ def dist2(x, y):
                     cnt += abs((x[i][j][k] + 1) - (y[i][j][k] + 1))
     return cnt
 
-NUMBER_SUBSET = 150
-NUMBER_CANDIDATES = 3
+NUMBER_SUBSET = 100
+NUMBER_CANDIDATES = 4
 
 # \pre The url is valid
 # \post The matrix of the image of the url is returned
@@ -158,12 +158,32 @@ get_batch(0,1000)
 
 # \pre The url is valid
 # \post A list with the top NUMBER_CANDIDATE image's that are most similar with the image specified in url
-def solve(url):
+def solve(url,i1,j1):
     # Get matrix from the image we want
     x = get_matrix(url)
                 
     candidates = []
+
+
     x_hist = compute_histogram(x)
+
+    try:
+        y = get_matrix(df.iloc[i1, 0])
+        candidates.append([dist2(x_hist, compute_histogram(y)), df.iloc[i1, 0]])
+    except:
+        pass
+    try:
+        y = get_matrix(df.iloc[i1, 1])
+        candidates.append([dist2(x_hist, compute_histogram(y)), df.iloc[i1, 1]])
+    except:
+        pass
+    try:
+        y = get_matrix(df.iloc[i1, 2])
+        candidates.append([dist2(x_hist, compute_histogram(y)), df.iloc[i1, 2]])
+    except:
+     pass
+
+
     # Get K candidates 
     for _ in range(NUMBER_SUBSET):
         # Get random indexes and the url in that position
@@ -187,7 +207,7 @@ def get_random_url():
     i = np.random.randint(0, ROWS - 1)
     j = np.random.randint(0, COLS - 1)
     url = df.iloc[i, j]
-    return url
+    return url,i,j
 
 # \pre The url is valid
 # \post The image from the url is shown in the app
@@ -201,11 +221,11 @@ st.write(" ")
 # Button to generate image and similarities
 if st.button('Generate Image and Similars'):
     # Get url and show it
-    url = get_random_url()
+    url,i1,j1 = get_random_url()
     show_image(url)
 
     # Get the url's from 
-    links = solve(url)
+    links = solve(url,i1,j1)
 
     # Divide row into rows
     cols = st.columns(NUMBER_CANDIDATES)
