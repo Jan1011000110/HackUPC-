@@ -1,7 +1,7 @@
 # Clothing Similarity Recognition Project
 
 ## Overview
-This project aims to develop a Python-based solution for recognizing similarities between clothing items. Leveraging machine learning, pattern recognition, computer vision, and color analysis techniques, the system identifies similarities among various pieces of clothing based on their visual attributes.
+This project aims to develop a Python-based solution for recognizing similarities between clothing items. Leveraging machine learning, pattern recognition, computer vision, and color analysis techniques, the system identifies similarities among various pieces of clothing based on their visual attributes. 
 
 ## Features
 - **Machine Learning**: Utilizes machine learning algorithms to analyze and classify clothing items.
